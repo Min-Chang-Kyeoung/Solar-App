@@ -1,8 +1,11 @@
 package com.example.solar_energy;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -17,11 +20,21 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     PieChart pieChart;
+    Button btn_detail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         pieChart = (PieChart) findViewById(R.id.piechart);
+        btn_detail = (Button)findViewById(R.id.btn_detail);
+        btn_detail.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),
+                        DetailGraph.class);
+                startActivity(intent);
+            }
+        });
         setPieChart(50,50);
     }
 

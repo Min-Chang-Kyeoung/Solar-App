@@ -3,4 +3,8 @@
     <string name="usage"><u><b>전기 사용량</b></u></string>
     <string name="usage_percent"><b>발전비율</b></string>
     <string name="billing_title"><u><b>이번월 청구 금액</b></u></string>
+    <string name="install_help_title"><u><b>설치 도우미</b></u></string>
+    <string name="simulate_ar"><b>AR 설치 도우미</b></string>
+    <string name="information"><b>판매자 정보</b></string>
+    <string name="machine_learning_title"><u><b>우리의 인공지능</b></u></string>
 </resources>
