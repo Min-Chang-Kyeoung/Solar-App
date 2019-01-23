@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
+import com.example.solar_energy.Solar_Page.PanelActivity;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
@@ -21,12 +23,23 @@ public class MainActivity extends AppCompatActivity {
 
     PieChart pieChart;
     Button btn_detail;
+    ImageButton btn_information;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         pieChart = (PieChart) findViewById(R.id.piechart);
+        btn_information = (ImageButton)findViewById(R.id.btn_information);
         btn_detail = (Button)findViewById(R.id.btn_detail);
+
+        btn_information.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),PanelActivity.class);
+                startActivity(intent);
+            }
+        });
+
         btn_detail.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -35,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         setPieChart(50,50);
     }
 
@@ -54,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
 
         yValues.add(new PieEntry((float) power_generation,"발전량"));
         yValues.add(new PieEntry((float) usage,"사용량"));
-
 
 
         pieChart.animateY(1000, Easing.EasingOption.EaseInOutCubic); //애니메이션

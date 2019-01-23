@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".DetailGraph"></activity>
+        <activity android:name=".Solar_Page.PanelActivity"></activity>
     </application>
 
 </manifest>
