@@ -1,6 +1,7 @@
 package com.example.solar_energy.Solar_Page;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -49,6 +50,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context,DetailPanelActivity.class);
+                intent.putExtra("img",item.getImage());
+                intent.putExtra("title",item.getTitle());
+                intent.putExtra("company",item.getCompany());
+                context.startActivity(intent);
             }
         });
     }
