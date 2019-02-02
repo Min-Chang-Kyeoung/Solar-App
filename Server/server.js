@@ -19,7 +19,7 @@ app.use(methodOverride('X-HTTP-Method-Override')); // override with the X-HTTP-M
 var server = app.listen(port);
 server.timeout = 5000;
 var io = require('socket.io')(server);
-require('./routes')(app);
+require('./Routes')(app);
 app.set('socketio',io);
 
 console.log('server is on port ' + port);
