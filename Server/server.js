@@ -7,7 +7,7 @@ var url            = require('./config/url');
 var logger         = require('morgan');
 var port = process.env.PORT || 3000; // set PORT
 mongoose.Promise = global.Promise;
-mongoose.connect(url.dburl);
+mongoose.connect(url.dburl, { useNewUrlParser: true });
 
 // get all data/stuff of the body (POST) parameters
 app.use(logger('tiny'));
@@ -20,6 +20,7 @@ var server = app.listen(port);
 server.timeout = 5000;
 var io = require('socket.io')(server);
 require('./Routes')(app);
+app.set('jwt-secret',url.secret);
 app.set('socketio',io);
 
 console.log('server is on port ' + port);
