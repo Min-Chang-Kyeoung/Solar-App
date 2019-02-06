@@ -7,6 +7,5 @@ module.exports = () =>{
     app.post('/SignUp',usercontroller.insertUser);
     app.use('/LogIn',auth);
     app.post('/LogIn',usercontroller.loginUser);
-
     return app;
 }
