@@ -40,7 +40,6 @@ public class DetailPanelActivity extends AppCompatActivity {
         imageView = findViewById(R.id.img_detail_solar);
         txtTitle = findViewById(R.id.txt_detail_panel);
         txtCompany = findViewById(R.id.txt_detail_company);
-
         txtCompanyNumber = findViewById(R.id.txt_company_number);
         txtPrice = findViewById(R.id.txt_price);
         txtPanelType = findViewById(R.id.txt_panel_type);

@@ -22,7 +22,7 @@ public class Solar_Item {
     Solar_Item(String _id, String image, String title, String company) {
         this._id = _id;
         this.company = company;
-        this.image = image;
+        this.image = image + ".jpg";
         this.title = title;
     }
 }
