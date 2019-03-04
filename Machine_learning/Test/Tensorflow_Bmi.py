@@ -8,7 +8,7 @@ x = tf.placeholder(tf.float32, [None,2])
 y_ = tf.placeholder(tf.float32, [None,1])
 
 W = tf.Variable([2,1])
-b = tf.Variable([2])
+b = tf.Variable([3])
 y = tf.nn.softmax(tf.matmul(x,W)+b)
 
 cross_entropy = -tf.reduce_sum(y_*tf.log(y))
