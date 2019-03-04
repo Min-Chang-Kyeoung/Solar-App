@@ -1,5 +1,6 @@
 package com.example.solar_energy.Solar_Page;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -32,6 +33,8 @@ public class DetailPanelActivity extends AppCompatActivity {
     private TextView txtPanelWeight;
     private TextView txtPanelApperance;
 
+    String _id;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,26 +51,50 @@ public class DetailPanelActivity extends AppCompatActivity {
         txtPanelWeight = findViewById(R.id.txt_panel_weight);
         txtPanelApperance = findViewById(R.id.txt_panel_appearance);
 
-        getIncomingIntent();
     }
+
+
+
+    class StringTask extends AsyncTask<Void, String, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            getIncomingIntent();
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            requestPostDetail();
+        }
+    }
+
+
+
+
     private void getIncomingIntent() {
-        String _id = getIntent().getStringExtra("_id");
+        _id = getIntent().getStringExtra("_id");
         String image = getIntent().getStringExtra("img");
         String title = getIntent().getStringExtra("title");
         String company = getIntent().getStringExtra("company");
-        setData(_id, image, title, company);
+        setData( image, title, company);
     }
 
-    private void setData(String _id,String image, String title, String company) {
+    private void setData(String image, String title, String company) {
         Log.e("item", title + "\n" + company);
         Picasso.get().load(image).into(imageView);
         txtTitle.setText(title);
         txtCompany.setText(company);
-        requestPostDetail(_id);
     }
 
 
-    public void requestPostDetail(String _id) {
+    public void requestPostDetail() {
         networkUtil = new NetworkUtil(this);
         JSONObject jsonObject = new JSONObject();
         try {
@@ -82,13 +109,12 @@ public class DetailPanelActivity extends AppCompatActivity {
         return new Response.Listener<JSONObject>() {
             public void onResponse(JSONObject response) {
                 try {
-                    response.getBoolean("success");
                     txtCompanyNumber.setText("상경이 다음 여자친구 ㅎㅎㅅㅎㅎ");
                     txtPrice.setText(response.getString("price"));
                     txtPanelType.setText(response.getString("type"));
                     txtPanelPercent.setText(response.getString("percent"));
                     txtPanelRange.setText(response.getString("range"));
-                    txtPanelWeight.setText(response.getString("weight"));
+                  //  txtPanelWeight.setText(response.getString("weight"));
                     txtPanelApperance.setText(response.getString("appearance"));
 
                 } catch (JSONException e) {

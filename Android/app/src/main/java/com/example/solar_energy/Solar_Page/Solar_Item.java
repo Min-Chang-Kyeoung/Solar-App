@@ -1,5 +1,7 @@
 package com.example.solar_energy.Solar_Page;
 
+import com.example.solar_energy.network.Config;
+
 public class Solar_Item {
     String _id;
     String image;
@@ -22,7 +24,7 @@ public class Solar_Item {
     Solar_Item(String _id, String image, String title, String company) {
         this._id = _id;
         this.company = company;
-        this.image = image + ".jpg";
+        this.image = Config.MAIN_URL+Config.GET_IMG +image + ".jpg";
         this.title = title;
     }
 }

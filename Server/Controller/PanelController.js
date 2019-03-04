@@ -12,7 +12,9 @@ module.exports = {
         let _id = req.body._id
         let panelData = Panel.findById({_id:_id})
         panelData.exec()
-        .then(panel => {res.send(panel)})
+        .then(panel => {
+            console.log(panel);
+            res.send(panel)})
         .catch(err => {res.send(err)})
     }
 }

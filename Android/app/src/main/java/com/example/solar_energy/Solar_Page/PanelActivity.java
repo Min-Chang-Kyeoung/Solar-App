@@ -48,13 +48,15 @@ public class PanelActivity extends AppCompatActivity {
                 View child = rv.findChildViewUnder(e.getX(), e.getY());
                 int position = rv.getChildAdapterPosition(child);
 
-                Intent intent = new Intent(getApplicationContext(),Solar_Item.class);
-                intent.putExtra("_id", items.get(position).get_id());
-                intent.putExtra("imgUrl",items.get(position).getImage());
-                intent.putExtra("name",items.get(position).getTitle());
-                intent.putExtra("company",items.get(position).getCompany());
-                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
+                if(position > -1) {
+                    Intent intent = new Intent(PanelActivity.this, DetailPanelActivity.class);
+                    intent.putExtra("_id", items.get(position).get_id());
+                    intent.putExtra("imgUrl", items.get(position).getImage());
+                    intent.putExtra("name", items.get(position).getTitle());
+                    intent.putExtra("company", items.get(position).getCompany());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                }
                 return false;
             }
 
