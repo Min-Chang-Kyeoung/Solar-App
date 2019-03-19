@@ -52,8 +52,14 @@ public class PanelActivity extends AppCompatActivity {
                     Intent intent = new Intent(PanelActivity.this, DetailPanelActivity.class);
                     intent.putExtra("_id", items.get(position).get_id());
                     intent.putExtra("imgUrl", items.get(position).getImage());
-                    intent.putExtra("name", items.get(position).getTitle());
+                    intent.putExtra("name", items.get(position).getName());
                     intent.putExtra("company", items.get(position).getCompany());
+                    intent.putExtra("type",items.get(position).getType());
+                    intent.putExtra("price",items.get(position).getType());
+                    intent.putExtra("percent",items.get(position).getPercent());
+                    intent.putExtra("range",items.get(position).getRange());
+                    intent.putExtra("appearance",items.get(position).getAppearance());
+                    intent.putExtra("price",items.get(position).getPrice());
                     intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                 }
@@ -78,10 +84,7 @@ public class PanelActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-
-                Log.e("dddd","asdfasdfasdf");
-                requestGetItems();
-
+               if(onceDataLoad){ requestGetItems(); }
             return null;
         }
 
@@ -101,7 +104,6 @@ public class PanelActivity extends AppCompatActivity {
 
     public void requestGetItems() {
         networkUtil = new NetworkUtil(getApplicationContext());
-        Log.e("asdfasdf",Config.MAIN_URL + Config.GET_ITEMS);
         networkUtil.requestServer(Config.MAIN_URL + Config.GET_ITEMS, networkProductSuccessListener(), networkErrorListener());
 
     }
@@ -109,7 +111,6 @@ public class PanelActivity extends AppCompatActivity {
     private Response.Listener<JSONArray> networkProductSuccessListener() {
         return new Response.Listener<JSONArray>() {
             public void onResponse(JSONArray response) {
-                Log.e("asdf","success");
                 getProductJsonArray(response);
                 onceDataLoad = false;
             }
@@ -136,7 +137,13 @@ public class PanelActivity extends AppCompatActivity {
                 items.add(new Solar_Item(jresponse.getString("_id"),
                         jresponse.getString("imgUrl"),
                         jresponse.getString("name"),
-                        jresponse.getString("company")
+                        jresponse.getString("company"),
+                        jresponse.getString("type"),
+                        jresponse.getString("price"),
+                        jresponse.getString("range"),
+                        jresponse.getString("appearance"),
+                        jresponse.getString("percent")
+
                 ));
                 recyclerAdapter.notifyDataSetChanged();
             }

@@ -49,7 +49,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
        // Drawable drawable = ContextCompat.getDrawable(context, item.getImage());
        // holder.image.setImageDrawable(drawable);
         Picasso.get().load(item.getImage()).into(holder.image);
-        holder.title.setText(item.getTitle());
+        holder.title.setText(item.getName());
         holder.company.setText(item.getCompany());
 
 /*

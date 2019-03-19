@@ -37,7 +37,7 @@
             android:id="@+id/txt_detail_panel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="50sp"
+            android:textSize="30sp"
             android:background="@color/textDefault"
             android:textColor="@color/white"
             android:gravity="center"

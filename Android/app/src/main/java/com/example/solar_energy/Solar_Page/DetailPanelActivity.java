@@ -35,7 +35,6 @@ public class DetailPanelActivity extends AppCompatActivity {
 
     String _id;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,88 +49,37 @@ public class DetailPanelActivity extends AppCompatActivity {
         txtPanelRange = findViewById(R.id.txt_panel_range);
         txtPanelWeight = findViewById(R.id.txt_panel_weight);
         txtPanelApperance = findViewById(R.id.txt_panel_appearance);
-
+        getIncomingIntent();
     }
-
-
-
-    class StringTask extends AsyncTask<Void, String, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            getIncomingIntent();
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            requestPostDetail();
-        }
-    }
-
 
 
 
     private void getIncomingIntent() {
         _id = getIntent().getStringExtra("_id");
-        String image = getIntent().getStringExtra("img");
-        String title = getIntent().getStringExtra("title");
+        String image = getIntent().getStringExtra("imgUrl");
         String company = getIntent().getStringExtra("company");
-        setData( image, title, company);
+        String type = getIntent().getStringExtra("type");
+        String price = getIntent().getStringExtra("price");
+        String percent = getIntent().getStringExtra("percent");
+        String range = getIntent().getStringExtra("range");
+        String appearance = getIntent().getStringExtra("appearance");
+        String name = getIntent().getStringExtra("name");
+        Log.e("percent",percent);
+        setData(name, image, company, type, price, percent, range, appearance);
     }
 
-    private void setData(String image, String title, String company) {
-        Log.e("item", title + "\n" + company);
+    private void setData(String name, String image, String company,String type, String price
+            , String percent, String range, String appearance) {
+
         Picasso.get().load(image).into(imageView);
-        txtTitle.setText(title);
+        txtTitle.setText(name);
         txtCompany.setText(company);
+        txtPrice.setText(price);
+        txtPanelType.setText(type);
+        txtPanelPercent.setText(percent);
+        txtPanelRange.setText(range);
+        txtPanelApperance.setText(appearance);
     }
 
 
-    public void requestPostDetail() {
-        networkUtil = new NetworkUtil(this);
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("_id", _id);
-            networkUtil.requestServer(Request.Method.POST, Config.MAIN_URL + Config.POST_DETAIL_ITEM, jsonObject, networkSuccessListener(), networkErrorListener());
-        } catch (JSONException e) {
-            throw new IllegalStateException("Failed to convert the object to JSON");
-        }
-    }
-
-    private Response.Listener<JSONObject> networkSuccessListener() {
-        return new Response.Listener<JSONObject>() {
-            public void onResponse(JSONObject response) {
-                try {
-                    txtCompanyNumber.setText("상경이 다음 여자친구 ㅎㅎㅅㅎㅎ");
-                    txtPrice.setText(response.getString("price"));
-                    txtPanelType.setText(response.getString("type"));
-                    txtPanelPercent.setText(response.getString("percent"));
-                    txtPanelRange.setText(response.getString("range"));
-                  //  txtPanelWeight.setText(response.getString("weight"));
-                    txtPanelApperance.setText(response.getString("appearance"));
-
-                } catch (JSONException e) {
-                    throw new IllegalArgumentException(e.toString());
-                }
-            }
-        };
-    }
-
-    private Response.ErrorListener networkErrorListener() {
-        return new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (error.getMessage() != null) {
-                    Toast.makeText(DetailPanelActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
-        };
-    }
 }

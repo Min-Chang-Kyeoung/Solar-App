@@ -35,6 +35,7 @@
         <activity android:name=".DetailGraph"></activity>
         <activity android:name=".Solar_Page.PanelActivity"></activity>
         <activity android:name=".Solar_Page.DetailPanelActivity"></activity>
+        <activity android:name=".SiginupActivity"></activity>
         <meta-data android:name="unity.build-id" android:value="9a0f8247-73a8-43d5-8891-7dc0f9e4fe42" />
         <meta-data android:name="unity.splash-mode" android:value="0" />
         <meta-data android:name="unity.splash-enable" android:value="True" />
