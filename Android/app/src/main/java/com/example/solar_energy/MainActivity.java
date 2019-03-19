@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.solar_energy.Solar_Page.PanelActivity;
+import com.example.solar_energy.UnityPlayerActivity;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     PieChart pieChart;
     Button btn_detail;
+    ImageButton btn_ar;
     ImageButton btn_information;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         pieChart = (PieChart) findViewById(R.id.piechart);
         btn_information = (ImageButton)findViewById(R.id.btn_information);
         btn_detail = (Button)findViewById(R.id.btn_detail);
+        btn_ar = (ImageButton)findViewById(R.id.btn_ar);
 
         btn_information.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,6 +52,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btn_ar.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),UnityPlayerActivity.class);
+                startActivity(intent);
+            }
+        });
         setPieChart(50,50);
     }
 

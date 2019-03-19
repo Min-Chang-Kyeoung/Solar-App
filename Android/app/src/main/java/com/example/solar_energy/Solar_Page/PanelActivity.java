@@ -70,7 +70,6 @@ public class PanelActivity extends AppCompatActivity {
 
             }
         });
-
         new StringTask().execute();
     }
 
@@ -79,10 +78,10 @@ public class PanelActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            if (onceDataLoad) {
+
                 Log.e("dddd","asdfasdfasdf");
                 requestGetItems();
-            }
+
             return null;
         }
 
@@ -104,11 +103,13 @@ public class PanelActivity extends AppCompatActivity {
         networkUtil = new NetworkUtil(getApplicationContext());
         Log.e("asdfasdf",Config.MAIN_URL + Config.GET_ITEMS);
         networkUtil.requestServer(Config.MAIN_URL + Config.GET_ITEMS, networkProductSuccessListener(), networkErrorListener());
+
     }
 
     private Response.Listener<JSONArray> networkProductSuccessListener() {
         return new Response.Listener<JSONArray>() {
             public void onResponse(JSONArray response) {
+                Log.e("asdf","success");
                 getProductJsonArray(response);
                 onceDataLoad = false;
             }
