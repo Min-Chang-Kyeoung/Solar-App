@@ -5,7 +5,7 @@ var app = express();
 
 module.exports = () =>{
     app.post('/SignUp',usercontroller.insertUser);
-    app.use('/LogIn',auth);
+    app.use('/Auth',auth);
     app.post('/LogIn',usercontroller.loginUser);
     return app;
 }

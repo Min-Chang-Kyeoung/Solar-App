@@ -1,8 +1,10 @@
 package com.example.solar_energy.Solar_Page;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,13 +15,14 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.solar_energy.R;
+import com.example.solar_energy.model.Solar_Item;
 import com.example.solar_energy.network.Config;
 import com.example.solar_energy.network.NetworkUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import com.example.solar_energy.model.Solar_Item;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -152,4 +155,13 @@ public class PanelActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Failed to parse the String: ");
         }
     }
+    @Override
+    protected void onStop(){
+        super.onStop();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.commit();
+    }
+
 }

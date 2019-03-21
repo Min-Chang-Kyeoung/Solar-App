@@ -1,12 +1,15 @@
 package com.example.solar_energy;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.solar_energy.Solar_Page.PanelActivity;
 import com.example.solar_energy.UnityPlayerActivity;
@@ -18,6 +21,8 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
     Button btn_detail;
     ImageButton btn_ar;
     ImageButton btn_information;
+    TextView txtBillingName;
+    TextView txtMachineLearningName1;
+    TextView  txtMachineLearningName2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +42,11 @@ public class MainActivity extends AppCompatActivity {
         btn_information = (ImageButton)findViewById(R.id.btn_information);
         btn_detail = (Button)findViewById(R.id.btn_detail);
         btn_ar = (ImageButton)findViewById(R.id.btn_ar);
+
+        txtBillingName = findViewById(R.id.txt_billing_name);
+        txtMachineLearningName1 = findViewById(R.id.txt_machine_learning_name1);
+        txtMachineLearningName2 = findViewById(R.id.txt_machine_learning_name2);
+        setName();
 
         btn_information.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +74,15 @@ public class MainActivity extends AppCompatActivity {
         });
         setPieChart(50,50);
     }
+
+    void setName(){
+        Intent intent = getIntent();
+        String name = intent.getExtras().getString("name");
+        txtBillingName.setText(name);
+        txtMachineLearningName1.setText(name);
+        txtMachineLearningName2.setText(name);
+    }
+
 
     void setPieChart(double power_generation, double usage){
 
@@ -96,6 +118,15 @@ public class MainActivity extends AppCompatActivity {
         data.setValueTextColor(Color.YELLOW);
 
         pieChart.setData(data);
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+         SharedPreferences.Editor editor = preferences.edit();
+         editor.clear();
+         editor.commit();
     }
 
 }

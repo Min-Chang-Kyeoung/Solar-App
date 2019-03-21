@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.solar_energy.R;
+import com.example.solar_energy.model.Solar_Item;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

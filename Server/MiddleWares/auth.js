@@ -26,11 +26,18 @@ const authMiddleware = (req,res,next) => {
         })
     }
 
+    // const respond = (token) =>{
+    //     res.json({
+    //         info: token
+    //     })
+    // }
+
     // process the promise
     promise.then((decoded)=>{
         req.decoded = decoded
         next()
     }).catch(onError)
+    //promise.then(respond).catch(onError)
 
 }
 

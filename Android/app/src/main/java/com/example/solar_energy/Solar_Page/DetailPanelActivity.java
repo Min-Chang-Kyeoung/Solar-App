@@ -1,7 +1,9 @@
 package com.example.solar_energy.Solar_Page;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
@@ -81,5 +83,13 @@ public class DetailPanelActivity extends AppCompatActivity {
         txtPanelApperance.setText(appearance);
     }
 
+    @Override
+    protected void onStop(){
+        super.onStop();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.commit();
+    }
 
 }

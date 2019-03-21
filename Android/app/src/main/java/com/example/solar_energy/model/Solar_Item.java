@@ -1,4 +1,4 @@
-package com.example.solar_energy.Solar_Page;
+package com.example.solar_energy.model;
 
 import com.example.solar_energy.network.Config;
 
@@ -31,8 +31,8 @@ public class Solar_Item {
     public String getRange() { return this.range; }
     public String getAppearance() { return this.appearance; }
 
-    Solar_Item(String _id, String image, String name, String company,String type,
-               String price, String range, String appearance, String percent) {
+    public Solar_Item(String _id, String image, String name, String company, String type,
+                      String price, String range, String appearance, String percent) {
         this._id = _id;
         this.company = company;
         this.image = Config.MAIN_URL+Config.GET_IMG +image + ".jpg";
