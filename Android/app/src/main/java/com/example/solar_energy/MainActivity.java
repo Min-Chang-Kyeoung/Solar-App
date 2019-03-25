@@ -3,14 +3,20 @@ package com.example.solar_energy;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.example.solar_energy.Solar_Page.PanelActivity;
 import com.example.solar_energy.UnityPlayerActivity;
 import com.github.mikephil.charting.animation.Easing;
@@ -21,9 +27,15 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import com.example.solar_energy.network.NetworkUtil;
+import com.example.solar_energy.network.Config;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,10 +46,15 @@ public class MainActivity extends AppCompatActivity {
     TextView txtBillingName;
     TextView txtMachineLearningName1;
     TextView  txtMachineLearningName2;
+    TextView txtMachineLearningResult;
+    String rnnValue;
+    NetworkUtil networkUtil;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        networkUtil = new NetworkUtil(getApplicationContext());
         pieChart = (PieChart) findViewById(R.id.piechart);
         btn_information = (ImageButton)findViewById(R.id.btn_information);
         btn_detail = (Button)findViewById(R.id.btn_detail);
@@ -46,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         txtBillingName = findViewById(R.id.txt_billing_name);
         txtMachineLearningName1 = findViewById(R.id.txt_machine_learning_name1);
         txtMachineLearningName2 = findViewById(R.id.txt_machine_learning_name2);
+        txtMachineLearningResult = findViewById(R.id.txt_machine_learning_result);
         setName();
 
         btn_information.setOnClickListener(new View.OnClickListener() {
@@ -73,9 +91,69 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         setPieChart(50,50);
+
+        new StringTask().execute();
     }
 
-    void setName(){
+
+
+    class StringTask extends AsyncTask<Void, String, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            requestRnnValueToServer();
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            txtMachineLearningResult.setText(rnnValue);
+            //txtMachineLearningResult.notify();
+        }
+    }
+
+
+    private void requestRnnValueToServer() {
+        JSONObject jsonObject = new JSONObject();
+        networkUtil.requestServer(Config.MAIN_URL + Config.GET_RNNDATA,rnnValueSuccessListener(),rnnValueErrorListener() );
+    }
+
+    private Response.ErrorListener rnnValueErrorListener() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null) {
+                    Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+    }
+
+    private Response.Listener<JSONArray> rnnValueSuccessListener() {
+        return new Response.Listener<JSONArray>() {
+            public void onResponse(JSONArray response) {
+                JSONObject jresponse;
+                for(int i=0;i<response.length();i++){
+                    try {
+                        jresponse = response.getJSONObject(i);
+                        rnnValue = jresponse.getString("value");
+                        txtMachineLearningResult.setText(rnnValue + "W");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        };
+    }
+
+
+    private void setName(){
         Intent intent = getIntent();
         String name = intent.getExtras().getString("name");
         txtBillingName.setText(name);
@@ -84,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    void setPieChart(double power_generation, double usage){
+    private void setPieChart(double power_generation, double usage){
 
         pieChart.setUsePercentValues(true);
         pieChart.getDescription().setEnabled(false);
