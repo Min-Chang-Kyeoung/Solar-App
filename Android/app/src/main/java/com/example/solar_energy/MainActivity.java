@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         setPieChart(50,50);
-
         new StringTask().execute();
     }
 
@@ -119,8 +118,48 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void requestRnnValueToServer() {
-        JSONObject jsonObject = new JSONObject();
         networkUtil.requestServer(Config.MAIN_URL + Config.GET_RNNDATA,rnnValueSuccessListener(),rnnValueErrorListener() );
+    }
+
+    private void requestSolarValueServer(){
+        networkUtil.requestServer(Config.MAIN_URL + Config.GET_SOLAR_DATA,solarValueSuccessListener(),solarValueErrorListener());
+    }
+
+
+    private Response.Listener<JSONArray> solarValueSuccessListener() {
+        return new Response.Listener<JSONArray>() {
+            public void onResponse(JSONArray response) {
+                JSONObject jresponse;
+                JSONObject hardware,solar;
+                String hardwareData;
+                String solarData;
+                for(int i=0;i<response.length();i++) {
+                    try {
+                        jresponse = response.getJSONObject(i);
+                        hardware = jresponse.getJSONObject("hardware");
+                        solar = jresponse.getJSONObject("solar");
+                        hardwareData = hardware.getString("hardware");
+                        solarData = solar.getString("value");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                double hardwareDataToChart = Double.parseDouble(hardwareData);
+                double solarDataToChart = Double.parseDouble(solarData);
+                setPieChart(50,50);
+            }
+        };
+    }
+
+    private Response.ErrorListener solarValueErrorListener() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null) {
+                    Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        };
     }
 
     private Response.ErrorListener rnnValueErrorListener() {

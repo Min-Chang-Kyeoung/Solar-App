@@ -7,4 +7,5 @@ public class Config {
     public static String POST_SIGNUP = "api/User/SignUp";
     public static String POST_LOGIN = "api/User/LogIn";
     public static String GET_RNNDATA = "api/Rnn/getRnnValue";
+    public static String GET_SOLAR_DATA = "api/Rnn/getValue";
 }

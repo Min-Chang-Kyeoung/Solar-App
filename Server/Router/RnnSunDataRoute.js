@@ -4,8 +4,9 @@ var app = express();
 
 module.exports = () =>{
     app.get('/getRnnValue',RnnSunDataController.getRnnData);
-    app.get('/getHardwareValue',RnnSunDataController.getHardwareData);
+    app.get('/getValue',RnnSunDataController.getHardwareData);
     app.get('/insertSolar',RnnSunDataController.insertSolarValue);
-    app.get('/getSolarValue',RnnSunDataController.getSolarValue);
+    //app.get('/getSolarValue',RnnSunDataController.getSolarValue);
+    app.get('/test',RnnSunDataController.test);
     return app;
 }

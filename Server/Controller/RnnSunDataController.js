@@ -1,6 +1,7 @@
 const RnnValue = require("../Models/rnnValue")
 const request = require("request");
 const Solar = require('../Models/Solar');
+const date_utils = require('date-utils');
 
 module.exports = {
     getRnnData : function(req,res){
@@ -19,20 +20,28 @@ module.exports = {
                 request(url , (err, res, body)=>{
                     arduinoData = null;
                     arduinoData = JSON.stringify(JSON.parse(body));
-                    if(err) reject(err)
-                    else resolve(arduinoData);
+
+                    ////////////// Solar Data ///////////////
+                    let newDate = new Date();
+                    let time = newDate.toFormat('YYYY-MM-DD');
+                    let solarValue = Solar.findOne({date:time.toString()})
+                    solarValue.exec().then(solarValue => {
+                        if (err) reject(err)
+                        else {
+                            data = {solar:solarValue,hardware:arduinoData};
+                            resolve(data);
+                        }
+                    });
                 });
             });
             return promise;
         }
         getData()
-        .then((arduinoData) => {console.log(arduinoData); res.send(arduinoData)});
+        .then((data) => {res.json(data)});
     },
 
     insertSolarValue : function(req,res){
-        let solarData = [{value:"12.4",date:"2019-05-03"},{value:"10.7",date:"2019-05-04"},
-        {value:"11.1",date:"2019-05-05"},{value:"12.8",date:"2019-05-06"},{value:"12.9",date:"2019-05-07"},
-        {value:"12.2",date:"2019-05-08"},{value:"12.3",date:"2019-05-09"},{value:"13.7",date:"2019-05-10"}]
+        let solarData = [{value:"15.3",date:"2019-05-21"}]
         for(let i=0; i<solarData.length;i++){
             let solorData = new Solar({
                 value:solarData[i].value,
@@ -44,8 +53,17 @@ module.exports = {
     },
 
     getSolarValue : function(req,res){
-        let solarValue = Solar.find()
-        solarValue.exec().then(solarValue=>{res.send(solarValue); console.log(solarValue);})
+        let newDate = new Date();
+        let time = newDate.toFormat('YYYY-MM-DD');
+        let solarValue = Solar.findOne({date:time.toString()})
+        solarValue.exec().then(solarValue => {res.send(solarValue); 
+            console.log(solarValue);})
         .catch(err => res.send(err));
+    },
+
+    test : function(req,res){
+        id = req.query.id;
+        console.log(id);
+        res.send(id);
     }
 }
