@@ -47,9 +47,15 @@ public class MainActivity extends AppCompatActivity {
     TextView txtMachineLearningName1;
     TextView  txtMachineLearningName2;
     TextView txtMachineLearningResult;
+    TextView txtUsageNumPercent;
+    TextView txtPresentElectricPercentWon;
+    TextView txtDevelopedElecttricWon;
+    TextView txtPridictBillWon;
+    TextView txtDescription;
     String rnnValue;
     NetworkUtil networkUtil;
-
+    double parseHardwareData;
+    double parseSolarData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,11 +65,15 @@ public class MainActivity extends AppCompatActivity {
         btn_information = (ImageButton)findViewById(R.id.btn_information);
         btn_detail = (Button)findViewById(R.id.btn_detail);
         btn_ar = (ImageButton)findViewById(R.id.btn_ar);
-
+        txtUsageNumPercent = findViewById(R.id.txt_usage_num_percent);
+        txtPresentElectricPercentWon = findViewById(R.id.present_electric_percent_won);
+        txtDevelopedElecttricWon = findViewById(R.id.developed_electric_won);
+        txtPridictBillWon = findViewById(R.id.txt_pridict_bill_won);
         txtBillingName = findViewById(R.id.txt_billing_name);
         txtMachineLearningName1 = findViewById(R.id.txt_machine_learning_name1);
         txtMachineLearningName2 = findViewById(R.id.txt_machine_learning_name2);
         txtMachineLearningResult = findViewById(R.id.txt_machine_learning_result);
+        txtDescription = findViewById(R.id.txt_description2);
         setName();
 
         btn_information.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             requestRnnValueToServer();
+            requestSolarValueServer();
             return null;
         }
 
@@ -112,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             txtMachineLearningResult.setText(rnnValue);
+            setPieChart(parseSolarData,parseHardwareData);
             //txtMachineLearningResult.notify();
         }
     }
@@ -130,23 +142,40 @@ public class MainActivity extends AppCompatActivity {
         return new Response.Listener<JSONArray>() {
             public void onResponse(JSONArray response) {
                 JSONObject jresponse;
-                JSONObject hardware,solar;
+                JSONObject solar;
                 String hardwareData;
                 String solarData;
+
                 for(int i=0;i<response.length();i++) {
                     try {
                         jresponse = response.getJSONObject(i);
-                        hardware = jresponse.getJSONObject("hardware");
                         solar = jresponse.getJSONObject("solar");
-                        hardwareData = hardware.getString("hardware");
+                        hardwareData = jresponse.getString("hardware");
                         solarData = solar.getString("value");
+                        parseHardwareData = Double.parseDouble(hardwareData);
+                        parseSolarData = Double.parseDouble(solarData);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-                double hardwareDataToChart = Double.parseDouble(hardwareData);
-                double solarDataToChart = Double.parseDouble(solarData);
-                setPieChart(50,50);
+                setPieChart(parseSolarData,parseHardwareData);
+                double percent = ((parseHardwareData + parseSolarData) / parseSolarData) * 100;
+                int saveWon,payWon;
+                saveWon = calulateWatToWon(parseSolarData * 30);
+                payWon = calulateWatToWon(parseHardwareData * 30);
+                double res = Math.abs(payWon-saveWon);
+                txtUsageNumPercent.setText((int) percent + "%");
+                txtPresentElectricPercentWon.setText((int)payWon+"원");
+                txtDevelopedElecttricWon.setText((int) saveWon+"원");
+                if(saveWon > payWon){
+                    txtPridictBillWon.setText("+" + res);
+                }
+                else{
+                    txtPridictBillWon.setText("-" + res);
+                }
+                Intent intent = getIntent();
+                String name = intent.getExtras().getString("name");
+                txtDescription.setText(name+" 님이 ㅓ무ㅕ" + (int)res/4000 + "잔의 커피를 마실수 있는 금액 입니다." );
             }
         };
     }
@@ -157,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 if (error.getMessage() != null) {
                     Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+
                 }
             }
         };
@@ -190,7 +220,21 @@ public class MainActivity extends AppCompatActivity {
             }
         };
     }
-
+    private int calulateWatToWon(double kwh){
+        int won = 0;
+        if(kwh > 200){
+            won += kwh * 93;
+        }
+        if(kwh > 400 && kwh < 200){
+            double over200kwh = kwh - 200;
+            won += over200kwh *180;
+        }
+        if (kwh > 400){
+            double over400kwh = kwh - 400;
+            won += over400kwh * 280;
+        }
+        return won;
+    }
 
     private void setName(){
         Intent intent = getIntent();

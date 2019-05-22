@@ -18,7 +18,7 @@ var io = require('socket.io')(server);
 app.set('socketio',io);
 
 app.get('/test',(req,res)=>{
-    res.send("70");
+    res.send("8.7");
 })
 
 console.log('server is on port ' + port);

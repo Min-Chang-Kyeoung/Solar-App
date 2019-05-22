@@ -37,11 +37,12 @@ module.exports = {
             return promise;
         }
         getData()
-        .then((data) => {res.json(data)});
+        .then((data) => {res.json([data])});
     },
 
     insertSolarValue : function(req,res){
-        let solarData = [{value:"15.3",date:"2019-05-21"}]
+        let solarData = [{value:"12.4",date:"2019-05-22"},{value:"13.2",date:"2019-05-23"}
+        ,{value:"14.1",date:"2019-05-24"},{value:"11.3",date:"2019-05-25"}]
         for(let i=0; i<solarData.length;i++){
             let solorData = new Solar({
                 value:solarData[i].value,
